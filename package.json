@@ -3,7 +3,7 @@
   "email": "anoopjohn@qburst.com",
   "url": "https://github.com/anupjon/",
   "homepage": "https://github.com/anupjon",
-  "version": "0.0.1-beta",
+  "version": "0.0.2-beta",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
