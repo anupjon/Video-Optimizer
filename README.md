@@ -23,5 +23,5 @@ Download the latest .deb package from the link below and install it using dpkg:
 
 Once downloaded, install the package using:
 ```sh
-sudo dpkg -i video-optimizer_0.0.1-beta_amd64.deb
+sudo dpkg -i video-optimizer_0.0.2-beta_amd64.deb
 ```
