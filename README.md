@@ -19,9 +19,9 @@ sudo apt update && sudo apt install ffmpeg -y
 
 ## Download
 Download the latest .deb package from the link below and install it using dpkg:
-[Download Video Optimizer .deb](https://github.com/anupjon/Video-Optimizer/releases/download/v1.0.1-beta.1/video-optimizer_1.0.1_amd64.deb) 
+[Download .deb](https://github.com/anupjon/Video-Optimizer/releases/download/0.0.1-beta/video-optimizer_0.0.1-beta_amd64.deb) 
 
 Once downloaded, install the package using:
 ```sh
-sudo dpkg -i video-optimizer_1.0.1_amd64.deb
+sudo dpkg -i video-optimizer_0.0.1-beta_amd64.deb
 ```
