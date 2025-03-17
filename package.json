@@ -1,0 +1,34 @@
+{
+  "name": "video-optimizer",
+  "email": "anoopjohn@qburst.com",
+  "url": "https://github.com/anupjon/",
+  "homepage": "https://github.com/anupjon",
+  "version": "1.0.1",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:linux": "electron-builder --linux",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "electron": "^34.1.1",
+    "electron-builder": "^25.1.8",
+    "electron-installer-debian": "^3.2.0"
+  },
+  "build": {
+    "appId": "com.ajohn.videooptimizer",
+    "productName": "VideoOptimizer",
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": [
+        "deb"
+      ],
+      "category": "Utility",
+      "maintainer": "Anoop John <anoopjohn@qburst.com>"
+    }
+  }
+}

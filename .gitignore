@@ -1,0 +1,11 @@
+node_modules
+dist/linux-unpacked
+dist/*.yml
+dist/*.yaml
+dist/*.AppImage
+dist/*.deb
+dist/*.rpm
+dist/*.tar.gz
+dist/*.zip
+dist/*.exe
+dist/*.blockmap

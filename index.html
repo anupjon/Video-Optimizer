@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Optimizer</title>
+  <!-- Load Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200 min-h-screen flex flex-col">
+  <!-- Info Banner -->
+
+
+  <!-- Toast Notification (Hidden by default) -->
+  <div id="toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg hidden flex items-center space-x-2">
+    <span id="toastMessage" class="text-sm"></span>
+    <button id="toastClose" class="bg-transparent text-white font-bold text-xl leading-none">&times;</button>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow container mx-auto p-4">
+    
+    <!-- File and Output Folder Selection (Responsive Grid) -->
+    <div class="flex flex-col md:grid-cols-2 gap-2 mb-3">
+      <div class="flex items-center space-x-2">
+        <button id="selectVideoButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded text-xs">
+          Choose Video
+        </button>
+        <span id="selectedVideoPath" class="text-gray-700 break-all text-xs"></span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button id="selectOutputFolderButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded text-xs">
+          Select Output Folder
+        </button>
+        <span id="selectedOutputFolder" class="text-gray-700 break-all text-xs">Default</span>
+      </div>
+    </div>
+
+    <!-- Optimization Parameters Form (Two Columns) -->
+    <form id="optimizerForm" class="bg-gray-100 p-3 rounded shadow-md mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <!-- CRF Field -->
+        <div>
+          <label for="crf" class="block font-medium text-gray-700 text-xs mb-1">CRF(0–51):</label>
+          <span class="block text-xs text-gray-500 mb-1">
+            Lower CRF means higher quality but larger file size.
+          </span>
+          <input type="number" id="crf" value="23" min="0" max="51" class="w-full p-1 border rounded text-xs">
+        </div>
+        <!-- Audio Codec Field -->
+        <div>
+          <label for="audioCodec" class="block font-medium text-gray-700 text-xs mb-1">Audio Codec:</label>
+          <span class="block text-xs text-gray-500 mb-1">
+            Choose the audio codec (AAC is widely supported).
+          </span>
+          <select id="audioCodec" class="w-full p-1 border rounded text-xs">
+            <option value="aac" selected>AAC</option>
+            <option value="mp3">MP3</option>
+            <option value="opus">Opus</option>
+          </select>
+        </div>
+        <!-- Audio Bitrate Field -->
+        <div>
+          <label for="audioBitrate" class="block font-medium text-gray-700 text-xs mb-1">Audio Bitrate (kbps):</label>
+          <span class="block text-xs text-gray-500 mb-1">
+            Higher bitrate gives better audio quality but increases file size.
+          </span>
+          <input type="number" id="audioBitrate" value="128" min="32" max="320" class="w-full p-1 border rounded text-xs">
+        </div>
+        <!-- Preset Field -->
+        <div>
+          <label for="preset" class="block font-medium text-gray-700 text-xs mb-1">Preset:</label>
+          <span class="block text-xs text-gray-500 mb-1">
+            Faster presets encode quicker but may produce larger files.
+          </span>
+          <select id="preset" class="w-full p-1 border rounded text-xs">
+            <option value="ultrafast">ultrafast</option>
+            <option value="superfast">superfast</option>
+            <option value="veryfast">veryfast</option>
+            <option value="faster">faster</option>
+            <option value="fast">fast</option>
+            <option value="medium" selected>medium</option>
+            <option value="slow">slow</option>
+            <option value="slower">slower</option>
+            <option value="veryslow">veryslow</option>
+          </select>
+        </div>
+        <!-- Scale Field -->
+        <div class="md:col-span-2">
+          <label for="scale" class="block font-medium text-gray-700 text-xs mb-1">Width Resolution:</label>
+          <span class="block text-xs text-gray-500 mb-1">
+            Select the target width. Height is auto-adjusted to maintain aspect ratio.
+          </span>
+          <select id="scale" class="w-full p-1 border rounded text-xs">
+            <option value="1920">1920</option>
+            <option value="1280" selected>1280</option>
+            <option value="720">720</option>
+            <option value="480">480</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-center mt-3 space-x-2">
+        <button type="button" id="optimizeButton" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded text-xs">
+          Optimize
+        </button>
+   
+      </div>
+    </form>
+    <!-- FFmpeg Requirement Overlay -->
+    <div id="ffmpegBanner" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-11/12 overflow-hidden">
+        <div class="bg-yellow-500 px-4 py-2 flex items-center">
+          <svg class="w-6 h-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+          <h3 class="text-white font-bold">FFmpeg Required</h3>
+        </div>
+        
+        <div class="p-5">
+          <p class="mb-4">FFmpeg is required for video optimization. Please install it before continuing:</p>
+          
+          <div class="bg-gray-100 p-3 rounded border border-gray-300 font-mono text-sm mb-4">
+            <p class="mb-2"><strong>Linux:</strong> <code>sudo apt install ffmpeg</code></p>
+            <p><strong>macOS:</strong> <code>brew install ffmpeg</code></p>
+          </div>
+          
+          <div class="flex justify-center space-x-3">
+            <button id="closeBanner" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+              Dismiss
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Replace the fetch call with the exposed API call
+      // window.electronAPI.checkFfmpeg()
+      //   .then(data => {
+      //     if (!data.installed) {
+      //       document.getElementById('ffmpegBanner').classList.remove('hidden');
+      //     }
+      //   })
+      //   .catch(error => console.error('Error checking FFmpeg:', error));
+        
+      // Close button functionality
+      document.getElementById('closeBanner')?.addEventListener('click', function() {
+        document.getElementById('ffmpegBanner').classList.add('hidden');
+      });
+    </script>
+    <!-- Progress Overlay (Hidden by default) -->
+    <div id="progressBar" class="hidden fixed inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-4/5 max-w-md">
+        <h3 class="text-lg font-bold mb-4 text-center">Optimizing Video</h3>
+        <div class="relative w-full bg-gray-300 h-6 rounded mb-4">
+          <div id="progressFill" class="bg-green-500 h-6 rounded" style="width: 0%"></div>
+          <span id="progressText" class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">0%</span>
+        </div>
+        <div class="flex justify-center">
+          <button id="stopButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            Stop Processing
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
